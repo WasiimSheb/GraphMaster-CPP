@@ -34,6 +34,8 @@ namespace ariel{
     const vector<vector<int>>& Graph::getAdjacencyMatrix(){
     return adjacencymatrix;
 }
-
+    int Graph::getNumVertices(){
+        return this -> adjacencymatrix.size();
+    }
 };
 
