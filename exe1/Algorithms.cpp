@@ -96,136 +96,79 @@ namespace ariel
         return "No path exists from vertex " + to_string(start) + " to vertex " + to_string(end);
     }
 
-void dfs(Graph g, int start, vector<bool> &visited) {
-    // Mark the starting vertex as visited
-    visited[start] = true;
+    void dfs(Graph g, int start, vector<bool> &visited)
+    {
+        // Mark the starting vertex as visited
+        visited[start] = true;
 
-    // Get the neighbors of the starting vertex
-    const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
-    for (size_t neighbor = 0; neighbor < adjMatrix[start].size(); ++neighbor) {
-        // If the edge exists and the neighbor vertex is not visited, recursively call dfs
-        if (adjMatrix[start][neighbor] != 0 && !visited[neighbor]) {
-            dfs(g, neighbor, visited);
-        }
-    }
-}
-
-string dfsDetectCycle(const vector<vector<int>> &adjMatrix, size_t v, vector<bool> &visited, vector<bool> &isVisiting, int parent, vector<int> &path) {
-    visited[v] = true;
-    isVisiting[v] = true;
-    path.push_back(v);
-
-    // Traverse all neighbors of vertex v
-    for (size_t neighbor = 0; neighbor < adjMatrix[v].size(); ++neighbor) {
-        if (adjMatrix[v][neighbor] != 0) {
-            if (!visited[neighbor]) {
-                // If the neighbor is not visited, recursively call the function
-                string cycle = dfsDetectCycle(adjMatrix, neighbor, visited, isVisiting, v, path);
-                if (!cycle.empty()) {
-                    // Cycle detected, return the cycle string
-                    if (cycle == "-1") {
-                        return to_string(v);
-                    } else {
-                        return to_string(v) + " -> " + cycle;
-                    }
-                }
-            } else if (isVisiting[neighbor] && static_cast<int>(neighbor) != parent) {
-                // If the neighbor is currently being visited and not the parent of v, there is a cycle
-                // Reconstruct and return the cycle string
-                string cycle;
-                int idx = static_cast<int>(path.size()) - 1;
-                while (idx >= 0 && path[idx] != static_cast<int>(neighbor)) {
-                    cycle = to_string(path[idx]) + " -> " + cycle;
-                    idx--;
-                }
-                cycle = to_string(neighbor) + " -> " + cycle + to_string(neighbor);
-                return cycle;
+        // Get the neighbors of the starting vertex
+        const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
+        for (size_t neighbor = 0; neighbor < adjMatrix[start].size(); ++neighbor)
+        {
+            // If the edge exists and the neighbor vertex is not visited, recursively call dfs
+            if (adjMatrix[start][neighbor] != 0 && !visited[neighbor])
+            {
+                dfs(g, neighbor, visited);
             }
         }
     }
 
-    // Backtrack: Remove the vertex from the current path
-    path.pop_back();
-    isVisiting[v] = false;
-
-    return ""; // No cycle detected
-}
-
-/**
- * @brief Function to check whether the graph contains a cycle.
- * 
- * @param g The graph to check for cycles.
- * @return The cycle string if a cycle is detected, an empty string otherwise.
- */
-string Algorithms::isContainsCycle(Graph g) {
-    // Get the adjacency matrix of the graph
-    const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
-    size_t numVertices = adjMatrix.size();
-
-    // Vector to keep track of visited vertices
-    vector<bool> visited(numVertices, false);
-    // Vector to keep track of vertices currently being visited in the DFS traversal
-    vector<bool> isVisiting(numVertices, false);
-    // Vector to store the current path in the DFS traversal
-    vector<int> path;
+    bool Algorithms::isContainsCycle(Graph g)
+{
+    int numVertices = g.getNumVertices();
+    vector<bool> visited(numVertices, false); // Vector to track visited vertices
 
     // Perform DFS traversal from each vertex
-    for (size_t i = 0; i < numVertices; ++i) {
-        if (!visited[i]) {
-            // Check for cycle starting from vertex i
-            string cycle = dfsDetectCycle(adjMatrix, i, visited, isVisiting, -1, path);
-            if (!cycle.empty()) {
-                return cycle;
+    for (int i = 0; i < numVertices; ++i)
+    {
+        if (!visited[i])
+        {
+            stack<int> s;
+            s.push(i);
+            vector<int> parent(numVertices, -1); // Vector to store parent of each vertex
+
+            while (!s.empty())
+            {
+                int v = s.top();
+                s.pop();
+
+                if (!visited[v])
+                {
+                    visited[v] = true;
+
+                    for (int neighbor = numVertices - 1; neighbor >= 0; --neighbor)
+                    {
+                        if (g.getAdjacencyMatrix()[v][neighbor])
+                        {
+                            if (!visited[neighbor])
+                            {
+                                s.push(neighbor);
+                                parent[neighbor] = v; // Set parent of neighbor
+                            }
+                            else if (parent[v] != neighbor)
+                            {
+                                // Back edge detected, construct cycle
+                                string cycle;
+                                int u = v;
+                                while (u != neighbor)
+                                {
+                                    cycle = to_string(u) + " -> " + cycle; // Add parent vertex to cycle string
+                                    u = parent[u];                         // Trace back to parent vertices
+                                }
+                                cycle = to_string(neighbor) + " -> " + cycle + to_string(neighbor); // Add neighbor vertex again to close the cycle
+                                cout << "The cycle is: " << cycle << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
-    return "0"; // No cycle found
+    // No back edges detected, so there's no cycles
+    return false;
 }
 
-    //    string Algorithms::isContainsCycle(Graph g) {
-    //     int numVertices = g.getNumVertices();
-    //     vector<bool> visited(numVertices, false); // Vector to track visited vertices
-
-    //     // Perform DFS traversal from each vertex
-    //     for (int i = 0; i < numVertices; ++i) {
-    //         if (!visited[i]) {
-    //             stack<int> s;
-    //             s.push(i);
-    //             vector<int> parent(numVertices, -1); // Vector to store parent of each vertex
-
-    //             while (!s.empty()) {
-    //                 int v = s.top();
-    //                 s.pop();
-
-    //                 if (!visited[v]) {
-    //                     visited[v] = true;
-
-    //                     for (int neighbor = numVertices - 1; neighbor >= 0; --neighbor) {
-    //                         if (g.getAdjacencyMatrix()[v][neighbor]) {
-    //                             if (!visited[neighbor]) {
-    //                                 s.push(neighbor);
-    //                                 parent[neighbor] = v; // Set parent of neighbor
-    //                             } else if (parent[v] != neighbor) {
-    //                                 // Back edge detected, construct cycle
-    //                                 string cycle;
-    //                                 int u = v;
-    //                                 while (u != neighbor) {
-    //                                     cycle = to_string(u) + " -> " + cycle; // Add parent vertex to cycle string
-    //                                     u = parent[u]; // Trace back to parent vertices
-    //                                 }
-    //                                 cycle = to_string(neighbor) + " -> " + cycle + to_string(neighbor); // Add neighbor vertex again to close the cycle
-    //                                 return "The cycle is: " + cycle;
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // No back edges detected, so there's no cycles
-    //     return "No cycle found";
-    // }
 
     string Algorithms::isBipartite(Graph g)
     {
