@@ -44,6 +44,7 @@ Returns:
 bool: Returns true if the graph contains a cycle, false otherwise.
 
 /**************************************************************/
+
 isBipartite:
 
 Description: Determines whether the given graph is bipartite or not using BFS.
@@ -57,6 +58,7 @@ Returns:
 string: Returns a string indicating whether the graph is bipartite and the two partitions if it is. If not bipartite, returns "0".
 
 /**************************************************************/
+
 negativeCycle:
 
 Description: Determines whether the given graph contains a negative cycle or not using Bellman-Ford algorithm.
