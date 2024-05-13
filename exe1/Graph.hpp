@@ -14,7 +14,7 @@ namespace ariel{
             void printGraph();
             void loadGraph(vector<vector<int>> adjmat);
             const vector<vector<int>> &getAdjacencyMatrix();
-            int getNumVertices();
+            size_t getNumVertices();
     };
 }
 #endif // GRAPH_HPP
