@@ -1,4 +1,4 @@
-//Wasimshebalny@gmail.com
+# Wasimshebalny@gmail.com
 
 # Compiler
 CC = clang++
