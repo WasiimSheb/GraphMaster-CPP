@@ -6,6 +6,12 @@ using namespace ariel;
 
 // Define the member functions of the Graph class
 
+Graph::Graph(){} // An empty constructor
+Graph::~Graph(){} // A destructor 
+
+/**
+ * @brief this function prints how many edges and vertices do exist in the graph
+*/
 void Graph::printGraph(){
     int numofedges = 0;
         for (size_t i = 0; i < this -> adjacencymatrix.size(); ++i){
@@ -19,7 +25,10 @@ void Graph::printGraph(){
         cout << "Graph with "<< this -> adjacencymatrix.size() << " vertices and " << numofedges << " edges." << endl;
     }
 
-// Load the graph from the adjacency matrix
+/** @brief Load the graph from the adjacency matrix
+ *  @param adjmat an adjacency matrix representing the graph we would like to load into
+ *  @details the function also checks whther the graph is legal or not and throws an exception if it's not
+*/
 void Graph::loadGraph(vector<vector<int>> adjmat)
 {
     for (size_t i = 0; i < adjmat.size(); i++)
