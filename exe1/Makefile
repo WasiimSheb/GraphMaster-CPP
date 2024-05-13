@@ -1,6 +1,3 @@
-
-Wasimshebalny@gmail.com
-
 # Compiler
 CC = clang++
 
@@ -13,7 +10,7 @@ TEST_EXEC = test
 
 # Source files
 DEMO_SRC = Demo.cpp Graph.cpp Algorithms.cpp
-TEST_SRC = TestCounter.cpp Graph.cpp Algorithms.cpp
+TEST_SRC = Test.cpp TestCounter.cpp Graph.cpp Algorithms.cpp
 
 # Object files
 DEMO_OBJ = $(DEMO_SRC:.cpp=.o)
@@ -34,6 +31,9 @@ demo.o: Demo.cpp Graph.hpp Algorithms.hpp
 
 TestCounter.o: TestCounter.cpp Graph.hpp Algorithms.hpp
 	$(CC) $(CFLAGS) -c TestCounter.cpp -o TestCounter.o
+
+Test.o: Test.cpp Graph.hpp Algorithms.hpp
+	$(CC) $(CFLAGS) -c Test.cpp -o Test.o
 
 Graph.o: Graph.cpp Graph.hpp
 	$(CC) $(CFLAGS) -c Graph.cpp -o Graph.o
