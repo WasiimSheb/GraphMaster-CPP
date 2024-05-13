@@ -1,53 +1,46 @@
-# #!make -f
 
-# CXX=clang
-# CXXFLAGS=-std=c++11 -Werror -Wsign-conversion
-# VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
+Wasimshebalny@gmail.com
 
-# SOURCES=Graph.cpp Algorithm.cpp TestCounter.cpp Test.cpp
-# OBJECTS=$(subst .cpp,.o,$(SOURCES))
+# Compiler
+CC = clang++
 
-# run: demo
-# 	./$^
+# Compiler flags
+CFLAGS = -std=c++11 -Wall -Wextra
 
-# demo: Demo.o $(OBJECTS)
-# 	$(CXX) $(CXXFLAGS) $^ -o demo
+# Executable names
+DEMO_EXEC = demo
+TEST_EXEC = test
 
-# test: TestCounter.o Test.o $(OBJECTS)
-# 	$(CXX) $(CXXFLAGS) $^ -o test
+# Source files
+DEMO_SRC = Demo.cpp Graph.cpp Algorithms.cpp
+TEST_SRC = TestCounter.cpp Graph.cpp Algorithms.cpp
 
-# tidy:
-# 	clang-tidy $(SOURCES) -checks=bugprone-*,clang-analyzer-*,cppcoreguidelines-*,performance-*,portability-*,readability-*,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-owning-memory --warnings-as-errors=-* --
+# Object files
+DEMO_OBJ = $(DEMO_SRC:.cpp=.o)
+TEST_OBJ = $(TEST_SRC:.cpp=.o)
 
-# valgrind: demo test
-# 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./demo 2>&1 | { egrep "lost| at " || true; }
-# 	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test 2>&1 | { egrep "lost| at " || true; }
+# Targets
+all: $(DEMO_EXEC) $(TEST_EXEC)
 
-# %.o: %.cpp
-# 	$(CXX) $(CXXFLAGS) --compile $< -o $@
+$(DEMO_EXEC): $(DEMO_OBJ)
+	$(CC) $(CFLAGS) $(DEMO_OBJ) -o $(DEMO_EXEC)
 
-# clean:
-# 	rm -f *.o demo test
+$(TEST_EXEC): $(TEST_OBJ)
+	$(CC) $(CFLAGS) $(TEST_OBJ) -o $(TEST_EXEC)
 
+# Object file dependencies
+demo.o: Demo.cpp Graph.hpp Algorithms.hpp
+	$(CC) $(CFLAGS) -c Demo.cpp -o demo.o
 
+TestCounter.o: TestCounter.cpp Graph.hpp Algorithms.hpp
+	$(CC) $(CFLAGS) -c TestCounter.cpp -o TestCounter.o
 
-CXX=clang++
-CXXFLAGS=-std=c++11 -Wall -Wextra -Werror
-LDFLAGS=
+Graph.o: Graph.cpp Graph.hpp
+	$(CC) $(CFLAGS) -c Graph.cpp -o Graph.o
 
-SOURCES=Algorithms.cpp Graph.cpp Demo.cpp
-HEADERS=Algorithms.hpp Graph.hpp
-OBJECTS=$(SOURCES:.cpp=.o)
+Algorithms.o: Algorithms.cpp Algorithms.hpp Graph.hpp
+	$(CC) $(CFLAGS) -c Algorithms.cpp -o Algorithms.o
 
-.PHONY: all clean
-
-all: demo
-
-demo: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $^ -o $@
-
-%.o: %.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
+# Clean
 clean:
-	rm -f $(OBJECTS) demo
+	rm -f $(DEMO_OBJ) $(TEST_OBJ) $(DEMO_EXEC) $(TEST_EXEC)
