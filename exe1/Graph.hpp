@@ -11,6 +11,9 @@ namespace ariel{
             vector<vector<int>> adjacencymatrix;
 
         public:
+
+            Graph();
+            ~Graph();
             void printGraph();
             void loadGraph(vector<vector<int>> adjmat);
             const vector<vector<int>> &getAdjacencyMatrix();
