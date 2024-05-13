@@ -15,19 +15,19 @@ namespace ariel
         int numVertices = adjMatrix.size();
 
         // Initialize visited array to track visited vertices
-        vector<bool> visited(numVertices, false);
+        vector<bool> visited(static_cast<size_t>(numVertices), false);
 
         // Perform BFS traversal from the first vertex
-        queue<int> q;
+        queue<size_t> q;
         q.push(0); // Start from vertex 0
         visited[0] = true;
 
         // BFS traversal
         while (!q.empty())
         {
-            int curr = q.front();
+            size_t curr = q.front();
             q.pop();
-            for (int neighbor = 0; neighbor < numVertices; ++neighbor)
+            for (size_t neighbor = 0; neighbor < numVertices; ++neighbor)
             {
                 if (adjMatrix[curr][neighbor] && !visited[neighbor])
                 {
@@ -50,20 +50,20 @@ namespace ariel
 
     string Algorithms::shortestPath(Graph g, int start, int end)
     {
-        int numVertices = g.getNumVertices();
+        size_t numVertices = g.getNumVertices();
         const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
 
-        queue<int> q;
-        q.push(start);
+        queue<size_t> q;
+        q.push(static_cast<size_t>(start));
 
         unordered_map<int, int> predecessors; // Map to store predecessors for path reconstruction
         vector<bool> visited(numVertices, false);
-        visited[start] = true;
+        visited[static_cast<size_t>(start)] = true;
 
         // BFS traversal
         while (!q.empty())
         {
-            int curr = q.front();
+            size_t curr = q.front();
             q.pop();
 
             // If the destination vertex is reached, reconstruct and return the shortest path
@@ -73,15 +73,15 @@ namespace ariel
                 int pred = predecessors[curr];
                 while (pred != start)
                 {
-                    path = to_string(pred) + " -> " + path;
+                    path = to_string(pred) + "->" + path;
                     pred = predecessors[pred];
                 }
-                path = to_string(start) + " -> " + path;
+                path = to_string(start) + "->" + path;
                 return path;
             }
 
             // Enqueue unvisited neighbors of the current vertex
-            for (int neighbor = 0; neighbor < numVertices; ++neighbor)
+            for (size_t neighbor = 0; neighbor < numVertices; ++neighbor)
             {
                 if (adjMatrix[curr][neighbor] && !visited[neighbor])
                 {
@@ -93,96 +93,80 @@ namespace ariel
         }
 
         // If the destination vertex is not reachable
-        return "No path exists from vertex " + to_string(start) + " to vertex " + to_string(end);
-    }
-
-    void dfs(Graph g, int start, vector<bool> &visited)
-    {
-        // Mark the starting vertex as visited
-        visited[start] = true;
-
-        // Get the neighbors of the starting vertex
-        const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
-        for (size_t neighbor = 0; neighbor < adjMatrix[start].size(); ++neighbor)
-        {
-            // If the edge exists and the neighbor vertex is not visited, recursively call dfs
-            if (adjMatrix[start][neighbor] != 0 && !visited[neighbor])
-            {
-                dfs(g, neighbor, visited);
-            }
-        }
+        return "-1";
     }
 
     bool Algorithms::isContainsCycle(Graph g)
-{
-    int numVertices = g.getNumVertices();
-    vector<bool> visited(numVertices, false); // Vector to track visited vertices
-
-    // Perform DFS traversal from each vertex
-    for (int i = 0; i < numVertices; ++i)
     {
-        if (!visited[i])
+        size_t numVertices = g.getNumVertices();
+        vector<bool> visited(numVertices, false); // Vector to track visited vertices
+
+        // Perform DFS traversal from each vertex
+        for (size_t i = 0; i < numVertices; ++i)
         {
-            stack<int> s;
-            s.push(i);
-            vector<int> parent(numVertices, -1); // Vector to store parent of each vertex
-
-            while (!s.empty())
+            if (!visited[i])
             {
-                int v = s.top();
-                s.pop();
+                stack<size_t> s;
+                s.push(i);
+                vector<size_t> parent(numVertices, size_t(-1)); // Vector to store parent of each vertex
 
-                if (!visited[v])
+                while (!s.empty())
                 {
-                    visited[v] = true;
+                    size_t v = s.top();
+                    s.pop();
 
-                    for (int neighbor = numVertices - 1; neighbor >= 0; --neighbor)
+                    if (!visited[v])
                     {
-                        if (g.getAdjacencyMatrix()[v][neighbor])
+                        visited[v] = true;
+
+                        // Iterate over neighbors of vertex v
+                        for (size_t neighbor = 0; neighbor != numVertices; ++neighbor)
                         {
-                            if (!visited[neighbor])
+                            if (g.getAdjacencyMatrix()[v][neighbor])
                             {
-                                s.push(neighbor);
-                                parent[neighbor] = v; // Set parent of neighbor
-                            }
-                            else if (parent[v] != neighbor)
-                            {
-                                // Back edge detected, construct cycle
-                                string cycle;
-                                int u = v;
-                                while (u != neighbor)
+                                if (!visited[neighbor])
                                 {
-                                    cycle = to_string(u) + " -> " + cycle; // Add parent vertex to cycle string
-                                    u = parent[u];                         // Trace back to parent vertices
+                                    s.push(neighbor);
+                                    parent[neighbor] = v; // Set parent of neighbor
                                 }
-                                cycle = to_string(neighbor) + " -> " + cycle + to_string(neighbor); // Add neighbor vertex again to close the cycle
-                                cout << "The cycle is: " << cycle << endl;
-                                return true;
+                                else if (parent[v] != neighbor)
+                                {
+                                    // Back edge detected, construct cycle
+                                    string cycle;
+                                    size_t u = v;
+                                    while (u != neighbor)
+                                    {
+                                        cycle = to_string(u) + "->" + cycle; // Add parent vertex to cycle string
+                                        u = parent[u];                       // Trace back to parent vertices
+                                    }
+                                    cycle = to_string(neighbor) + "->" + cycle + to_string(neighbor); // Add neighbor vertex again to close the cycle
+                                    cout << "The cycle is: " << cycle << endl;
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        // No back edges detected, so there's no cycles
+        return false;
     }
-    // No back edges detected, so there's no cycles
-    return false;
-}
-
 
     string Algorithms::isBipartite(Graph g)
     {
-        int numVertices = g.getNumVertices();
+        size_t numVertices = g.getNumVertices(); // Change type to size_t
+
         const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
-        vector<int> colors(numVertices, -1); // Vector to store vertex colors (-1 for uncolored, 0 and 1 for two colors)
-        queue<int> q;
-        vector<int> partA, partB;
+        vector<size_t> colors(numVertices, static_cast<size_t>(-1)); // Vector to store vertex colors (-1 for uncolored, 0 and 1 for two colors)
+        queue<size_t> q;
+        vector<size_t> partA, partB;
         bool isBipartite = true;
 
         // Perform BFS traversal from each vertex
-        for (int i = 0; i < numVertices; ++i)
+        for (size_t i = 0; i < numVertices; ++i) // Change loop variable to size_t
         {
-            if (colors[i] == -1)
+            if (colors[i] == static_cast<size_t>(-1))
             {
                 q.push(i);
                 colors[i] = 0;      // Color vertex i with color 0
@@ -190,17 +174,17 @@ namespace ariel
 
                 while (!q.empty())
                 {
-                    int curr = q.front();
+                    size_t curr = q.front();
                     q.pop();
 
                     // Assign opposite color to neighbors
-                    int nextColor = 1 - colors[curr]; // Toggle the color (0 to 1 or 1 to 0)
-                    for (int neighbor = 0; neighbor < numVertices; ++neighbor)
+                    size_t nextColor = 1 - colors[curr];                          // Toggle the color (0 to 1 or 1 to 0)
+                    for (size_t neighbor = 0; neighbor < numVertices; ++neighbor) // Change loop variable to size_t
                     {
                         if (adjMatrix[curr][neighbor])
                         {
                             // If neighbor is uncolored, assign the opposite color and enqueue it
-                            if (colors[neighbor] == -1)
+                            if (colors[neighbor] == static_cast<size_t>(-1))
                             {
                                 colors[neighbor] = nextColor;
                                 q.push(neighbor);
@@ -231,14 +215,14 @@ namespace ariel
         if (isBipartite)
         {
             partition += "The graph is bipartite: A={";
-            for (int vertex : partA)
+            for (size_t vertex : partA)
             {
                 partition += to_string(vertex) + ", ";
             }
             partition.pop_back(); // Remove trailing comma and space
             partition.pop_back();
             partition += "}, B={";
-            for (int vertex : partB)
+            for (size_t vertex : partB)
             {
                 partition += to_string(vertex) + ", ";
             }
@@ -256,7 +240,7 @@ namespace ariel
 
     string Algorithms::negativeCycle(Graph g)
     {
-        int numVertices = g.getNumVertices();
+        size_t numVertices = g.getNumVertices(); // Change type to size_t
         const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
 
         // Initialize distance array
@@ -264,11 +248,11 @@ namespace ariel
         dist[0] = 0; // Set distance from source vertex to itself as 0
 
         // Relax edges repeatedly to find shortest paths
-        for (int i = 0; i < numVertices - 1; ++i)
+        for (size_t i = 0; i < numVertices - 1; ++i) // Change loop variable to size_t
         {
-            for (int u = 0; u < numVertices; ++u)
+            for (size_t u = 0; u < numVertices; ++u) // Change loop variable to size_t
             {
-                for (int v = 0; v < numVertices; ++v)
+                for (size_t v = 0; v < numVertices; ++v) // Change loop variable to size_t
                 {
                     if (adjMatrix[u][v] && dist[u] != INT_MAX && dist[u] + adjMatrix[u][v] < dist[v])
                     {
@@ -279,9 +263,9 @@ namespace ariel
         }
 
         // Check for negative cycles
-        for (int u = 0; u < numVertices; ++u)
+        for (size_t u = 0; u < numVertices; ++u) // Change loop variable to size_t
         {
-            for (int v = 0; v < numVertices; ++v)
+            for (size_t v = 0; v < numVertices; ++v) // Change loop variable to size_t
             {
                 if (adjMatrix[u][v] && dist[u] != INT_MAX && dist[u] + adjMatrix[u][v] < dist[v])
                 {
