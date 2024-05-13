@@ -1,41 +1,45 @@
-#include<iostream>
-
+#include <iostream>
 #include "Graph.hpp"
 
 using namespace std;
-namespace ariel{
-    void Graph::printGraph(){
-        cout << "{";
+using namespace ariel;
+
+// Define the member functions of the Graph class
+
+void Graph::printGraph(){
+    int numofedges = 0;
         for (size_t i = 0; i < this -> adjacencymatrix.size(); ++i){
             for (size_t j = 0; j < this -> adjacencymatrix[i].size(); ++j)
             {
-                cout << this -> adjacencymatrix[i][j];
-                if (i != this -> adjacencymatrix.size() - 1 || j != this -> adjacencymatrix.size() - 1 ){
-                    cout << ", ";
+                if (adjacencymatrix[i][j] != 0){
+                    numofedges++;
                 }
-            }    
+            }  
         }
-        cout << "}" << endl;
+        cout << "Graph with "<< this -> adjacencymatrix.size() << " vertices and " << numofedges << " edges." << endl;
     }
 
-    void Graph::loadGraph(vector<vector<int>> adjmat){
-        this -> adjacencymatrix.resize(adjmat.size());
-        for (size_t i = 0; i < adjmat.size(); ++i) {
-            this -> adjacencymatrix[i].resize(adjmat[i].size());
-        }
-        size_t count = this -> adjacencymatrix.size();
-        for (size_t i = 0; i < count; ++i){
-            for (size_t j = 0; j < count; ++j){
-                this -> adjacencymatrix[i][j] = adjmat[i][j];
-            }
+// Load the graph from the adjacency matrix
+void Graph::loadGraph(vector<vector<int>> adjmat)
+{
+    for (size_t i = 0; i < adjmat.size(); i++)
+    {
+        if (adjmat.size() != adjmat[i].size())
+        {
+            throw invalid_argument("Invalid graph: The graph is not a square matrix.");
         }
     }
-    // because we're returning a reference to the user rather than a copy
-    const vector<vector<int>>& Graph::getAdjacencyMatrix(){
+    adjacencymatrix = adjmat;
+}
+
+// Get the adjacency matrix of the graph
+const vector<vector<int>> &Graph::getAdjacencyMatrix()
+{
     return adjacencymatrix;
 }
-    int Graph::getNumVertices(){
-        return this -> adjacencymatrix.size();
-    }
-};
 
+// Get the number of vertices in the graph
+size_t Graph::getNumVertices()
+{
+    return adjacencymatrix.size();
+}
