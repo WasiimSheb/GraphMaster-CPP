@@ -14,11 +14,11 @@ namespace ariel
     Algorithms::~Algorithms() {} // Destructor
 
     /**
- * @brief Checks if the graph is connected.
- * @param g Graph object representing the graph.
- * @return A boolean indicating whether the graph is connected.
- * @details This function performs a breadth-first search (BFS) traversal starting from the first vertex to determine if all vertices in the graph are reachable.
- */
+     * @brief Checks if the graph is connected.
+     * @param g Graph object representing the graph.
+     * @return A boolean indicating whether the graph is connected.
+     * @details This function performs a breadth-first search (BFS) traversal starting from the first vertex to determine if all vertices in the graph are reachable.
+     */
     bool Algorithms::isConnected(Graph g)
     {
         const vector<vector<int>> &adjMatrix = g.getAdjacencyMatrix();
@@ -58,15 +58,14 @@ namespace ariel
         return true; // Graph is connected
     }
 
-
     /**
-    * @brief Finds the shortest path between two vertices in the graph using Dijkstra's algorithm.
-    * @param g Graph object representing the graph.
-    * @param start The starting vertex of the path.
-    * @param end The ending vertex of the path.
-    * @return A string representing the shortest path from the start vertex to the end vertex and "-1" if there is no path.
-    * @details This function implements Dijkstra's algorithm to find the shortest path between the given start and end vertices in a weighted graph.
-    */
+     * @brief Finds the shortest path between two vertices in the graph using Dijkstra's algorithm.
+     * @param g Graph object representing the graph.
+     * @param start The starting vertex of the path.
+     * @param end The ending vertex of the path.
+     * @return A string representing the shortest path from the start vertex to the end vertex and "-1" if there is no path.
+     * @details This function implements Dijkstra's algorithm to find the shortest path between the given start and end vertices in a weighted graph.
+     */
     string Algorithms::shortestPath(Graph g, int start, int end)
     {
         size_t numVertices = g.getNumVertices();
@@ -115,15 +114,14 @@ namespace ariel
         return "-1";
     }
 
-
     /**
-    * @brief Determines if the graph contains a cycle.
-    * @param Graph object representing the graph.
-    * @return A boolean value indicating whether the graph contains a cycle and also a string indicating where the cycle is.
-    * @details This function performs a depth-first search (DFS) traversal from each vertex of the graph. During the DFS traversal,
-    * it tracks visited vertices and their parent vertices to detect back edges. If a back edge is encountered, indicating the presence
-    * of a cycle, the function returns true. Otherwise, if no back edges are detected, it returns false, indicating the absence of a cycle.
-    */
+     * @brief Determines if the graph contains a cycle.
+     * @param Graph object representing the graph.
+     * @return A boolean value indicating whether the graph contains a cycle and also a string indicating where the cycle is.
+     * @details This function performs a depth-first search (DFS) traversal from each vertex of the graph. During the DFS traversal,
+     * it tracks visited vertices and their parent vertices to detect back edges. If a back edge is encountered, indicating the presence
+     * of a cycle, the function returns true. Otherwise, if no back edges are detected, it returns false, indicating the absence of a cycle.
+     */
     bool Algorithms::isContainsCycle(Graph g)
     {
         size_t numVertices = g.getNumVertices();
@@ -181,15 +179,14 @@ namespace ariel
         return false;
     }
 
-
     /**
-    * @brief Determines if the graph is bipartite and partitions its vertices into two sets.
-    * @param g Graph object representing the graph.
-    * @return A string indicating whether the graph is bipartite and the partitioning of vertices into two sets.
-    * @details This function performs a breadth-first search (BFS) traversal from each vertex of the graph. During the BFS traversal,
-    * it assigns colors (0 and 1) to the vertices such that adjacent vertices have different colors. If it's possible to assign colors
-    * without any conflicts, the graph is bipartite.
-    */
+     * @brief Determines if the graph is bipartite and partitions its vertices into two sets.
+     * @param g Graph object representing the graph.
+     * @return A string indicating whether the graph is bipartite and the partitioning of vertices into two sets.
+     * @details This function performs a breadth-first search (BFS) traversal from each vertex of the graph. During the BFS traversal,
+     * it assigns colors (0 and 1) to the vertices such that adjacent vertices have different colors. If it's possible to assign colors
+     * without any conflicts, the graph is bipartite.
+     */
     string Algorithms::isBipartite(Graph g)
     {
         size_t numVertices = g.getNumVertices();
@@ -275,13 +272,12 @@ namespace ariel
         return partition;
     }
 
-
-/**
- * @brief Determines if the graph contains a negative cycle.
- * @param Graph object representing the graph.
- * @returns A string indicating whether the graph contains a negative cycle.
- * @details This function implements the Bellman-Ford algorithm to detect negative cycles in the graph.   
-*/
+    /**
+     * @brief Determines if the graph contains a negative cycle.
+     * @param Graph object representing the graph.
+     * @returns A string indicating whether the graph contains a negative cycle.
+     * @details This function implements the Bellman-Ford algorithm to detect negative cycles in the graph.
+     */
     string Algorithms::negativeCycle(Graph g)
     {
         size_t numVertices = g.getNumVertices(); // Change type to size_t
