@@ -12,7 +12,6 @@
   
     bool: Returns true if the graph is connected, false otherwise.
     
-  /**************************************************************/
   
   shortestPath:
   
@@ -30,7 +29,6 @@
   
     string: Returns a string representing the shortest path from the source vertex to the destination vertex. If no path exists, it returns a message indicating that no path exists.
     
-  /**************************************************************/
   
   isContainsCycle:
   
@@ -45,7 +43,6 @@
     
     bool: Returns true if the graph contains a cycle, false otherwise.
     
-  /**************************************************************/
   
     isBipartite:
     
@@ -59,7 +56,6 @@
     
     string: Returns a string indicating whether the graph is bipartite and the two partitions if it is. If not bipartite, returns "0".
     
-  /**************************************************************/
   
   negativeCycle:
   
