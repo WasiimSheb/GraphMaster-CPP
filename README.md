@@ -73,7 +73,7 @@ WasimShebalny@gmail.com
     bool: Returns true if the graph contains a cycle, false otherwise.
     
   
-    isBipartite:
+  isBipartite:
     
     Description: Determines whether the given graph is bipartite or not using BFS.
     
