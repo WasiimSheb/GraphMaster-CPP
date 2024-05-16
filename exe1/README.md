@@ -1,3 +1,18 @@
+#Graph:
+--------------------------------------------------------------------------
+  PrintGraph:
+    Description:
+      prints the data of the graph, how many vertices and edges does it contain.
+    Parameters:
+      none
+  LoadGraph:
+  
+      Description:
+        updates the adjacent matrix of the graph
+      Parameters: 
+
+      
+        an adjacency matrix of the new graph
 #Algorithms: 
 --------------------------------------------------------------------------
   isConnected:
