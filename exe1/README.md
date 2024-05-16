@@ -1,18 +1,30 @@
 #Graph:
 --------------------------------------------------------------------------
   PrintGraph:
+  
     Description:
       prints the data of the graph, how many vertices and edges does it contain.
     Parameters:
       none
   LoadGraph:
   
-      Description:
+        Description:
         updates the adjacent matrix of the graph
-      Parameters: 
-
-      
+      Parameters:    
         an adjacency matrix of the new graph
+  Getadjacencymatrix:
+
+        Description: 
+          returns the current adjacency matrix of the graph.
+        Parameters:
+          none
+  size_t numofvertices:
+
+        Description: 
+          returns the size of the vector of the adjacency matrix
+        Parameters:
+          none
+  
 #Algorithms: 
 --------------------------------------------------------------------------
   isConnected:
